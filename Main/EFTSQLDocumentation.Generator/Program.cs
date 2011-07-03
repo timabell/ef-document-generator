@@ -24,8 +24,6 @@ namespace EFTSQLDocumentation.Generator
             {
                 Console.WriteLine(e.Message);
                 parser.ShowUsage();
-
-                parser.ShowParsedArguments();
                 return;
             }
 
@@ -67,7 +65,7 @@ namespace EFTSQLDocumentation.Generator
                 }
             };
             FileArgument inputFileArgument = new FileArgument('i', "input", "original edmx file") { FileMustExist = true, Optional = false };
-            FileArgument outputFileArgument = new FileArgument('o', "output", "original edmx file") { FileMustExist = false };
+            FileArgument outputFileArgument = new FileArgument('o', "output", "output edmx file - Default : original edmx file") { FileMustExist = false, Optional = true };
 
             parser.Arguments.Add(connectionStringArgument);
             parser.Arguments.Add(inputFileArgument);
