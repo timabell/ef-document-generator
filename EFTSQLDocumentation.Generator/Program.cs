@@ -133,9 +133,11 @@ namespace EFTSQLDocumentation.Generator
         }
         private void AddNodeDocumentation(XElement element, String documentation)
         {
+            // remove stale documentation
+            element.FindByLocalName("Documentation").Remove();
+
             if (String.IsNullOrEmpty(documentation))
                 return;
-            element.FindByLocalName("Documentation").Remove();
             var xmlns = element.GetDefaultNamespace();
 
             element.AddFirst(new XElement(xmlns + "Documentation", new XElement(xmlns + "Summary", documentation)));
