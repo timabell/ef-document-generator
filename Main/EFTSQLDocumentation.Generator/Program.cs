@@ -81,6 +81,7 @@ namespace EFTSQLDocumentation.Generator
         public String OutputFileName { get; set; }
 
         private SqlConnection _connection;
+        private XNamespace _xmlns;
 
 
         public Program(String connectionString, String inputFileName, String outputFileName)
@@ -100,6 +101,13 @@ namespace EFTSQLDocumentation.Generator
         private void CreateDocumentation()
         {
             XDocument doc = XDocument.Load(this.InputFileName);
+
+            if (doc.Root == null)
+            {
+                throw new Exception(string.Format("Loaded XDocument Root is null. File: {0}", InputFileName));
+            }
+            // get root namespace for use when adding new elements. http://stackoverflow.com/a/7695789/10245
+            _xmlns = doc.Root.Name.Namespace;
  
             var entityTypeElements = doc.FindByLocalName("EntityType");
 
@@ -134,7 +142,7 @@ namespace EFTSQLDocumentation.Generator
                 return;
             element.FindByLocalName("Documentation").Remove();
 
-            element.AddFirst(new XElement("{http://schemas.microsoft.com/ado/2008/09/edm}Documentation", new XElement("{http://schemas.microsoft.com/ado/2008/09/edm}Summary", documentation)));
+            element.AddFirst(new XElement(_xmlns + "Documentation", new XElement(_xmlns + "Summary", documentation)));
         }
         private String GetTableDocumentation(String tableName)
         {
