@@ -99,15 +99,15 @@ namespace EFTSQLDocumentation.Generator
 
         private void CreateDocumentation()
         {
-
             XDocument doc = XDocument.Load(this.InputFileName);
-            IEnumerable<XElement> entityTypeElements = doc.Descendants("{http://schemas.microsoft.com/ado/2008/09/edm}EntityType");
+ 
+            var entityTypeElements = doc.FindByLocalName("EntityType");
 
             int i = 0;
             foreach (XElement entityTypeElement in entityTypeElements)
             {
                 String tableName = entityTypeElement.Attribute("Name").Value;
-                IEnumerable<XElement> propertyElements = entityTypeElement.Descendants("{http://schemas.microsoft.com/ado/2008/09/edm}Property");
+                var propertyElements = entityTypeElement.FindByLocalName("Property");
 
                 Console.Clear();
                 Console.WriteLine("Analyzing table {0} of {1}", i++, entityTypeElements.Count());
@@ -132,7 +132,7 @@ namespace EFTSQLDocumentation.Generator
         {
             if (String.IsNullOrEmpty(documentation))
                 return;
-            element.Descendants("{http://schemas.microsoft.com/ado/2008/09/edm}Documentation").Remove();
+            element.FindByLocalName("Documentation").Remove();
 
             element.AddFirst(new XElement("{http://schemas.microsoft.com/ado/2008/09/edm}Documentation", new XElement("{http://schemas.microsoft.com/ado/2008/09/edm}Summary", documentation)));
         }
